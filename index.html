@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEPTA App — Descoped Concept Prototype</title>
+<style>
+  :root{
+    --septa:#005DAA; --septa-dark:#003a6b; --rail:#5b2a86; --bus:#0a7d3c;
+    --ink:#15212e; --muted:#5b6b7a; --line:#e4e9ee; --bg:#eef1f4;
+    --live:#0a8a3c; --late:#c8771a; --cancel:#c62828; --card:#ffffff;
+    --note:#ff6a00;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#dfe6ec,#cfd8e0);color:var(--ink);padding:28px 16px 60px}
+  .page-head{max-width:880px;margin:0 auto 22px;text-align:center}
+  .page-head h1{font-size:20px;margin:0 0 6px;color:var(--septa-dark)}
+  .page-head p{margin:0 auto;max-width:620px;font-size:13.5px;color:var(--muted);line-height:1.5}
+  .controls{display:flex;gap:10px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
+  .btn{border:1px solid #c2ccd6;background:#fff;color:var(--septa-dark);padding:8px 14px;border-radius:20px;
+    font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .btn:hover{border-color:var(--septa)}
+  .btn.on{background:var(--note);border-color:var(--note);color:#fff}
+  .legend{max-width:880px;margin:6px auto 0;font-size:11.5px;color:var(--muted);text-align:center}
+  .legend b{color:var(--note)}
+
+  /* phone */
+  .stage{display:flex;justify-content:center;margin-top:22px}
+  .phone{width:390px;height:780px;background:#000;border-radius:46px;padding:12px;
+    box-shadow:0 30px 60px rgba(0,40,80,.28),0 4px 12px rgba(0,0,0,.2);position:relative}
+  .screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:36px;overflow:hidden;display:flex;flex-direction:column}
+  .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:130px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:40}
+
+  /* app chrome */
+  .statusbar{height:38px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 4px;
+    font-size:12px;font-weight:600;color:#fff;background:var(--septa)}
+  .appbar{background:var(--septa);color:#fff;padding:6px 16px 14px;display:flex;align-items:center;gap:10px}
+  .badge{width:30px;height:30px;border-radius:7px;background:#fff;color:var(--septa);font-weight:800;
+    display:grid;place-items:center;font-size:17px;letter-spacing:-1px}
+  .appbar h2{font-size:17px;margin:0;font-weight:700;flex:1}
+  .appbar .sub{font-size:11px;opacity:.85;font-weight:500}
+
+  .body{flex:1;overflow-y:auto;padding:14px 14px 88px}
+  .body::-webkit-scrollbar{width:0}
+
+  .view{display:none}
+  .view.active{display:block;animation:fade .2s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .sectlabel{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:6px 4px 8px}
+  .card{background:var(--card);border-radius:14px;padding:13px 14px;margin-bottom:11px;box-shadow:0 1px 3px rgba(20,40,60,.06);border:1px solid #eef1f4}
+  .card.tap{cursor:pointer;transition:.12s} .card.tap:active{transform:scale(.99)}
+
+  .row{display:flex;align-items:center;gap:11px}
+  .modechip{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;flex:0 0 auto}
+  .m-trolley{background:var(--bus)} .m-bus{background:#0a7d3c} .m-rail{background:var(--rail)} .m-bsl{background:#e36209}
+  .titleline{flex:1;min-width:0}
+  .titleline .t1{font-weight:700;font-size:14.5px}
+  .titleline .t2{font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .eta{text-align:right;flex:0 0 auto}
+  .eta .big{font-weight:800;font-size:19px;line-height:1}
+  .eta .small{font-size:10.5px;color:var(--muted)}
+
+  .status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:3px}
+  .s-live{background:#e6f5ec;color:var(--live)} .s-live .dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.4s infinite}
+  .s-late{background:#fbf0e0;color:var(--late)} .s-sched{background:#eef1f4;color:var(--muted)} .s-cancel{background:#fbe4e4;color:var(--cancel)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  .nextlist{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px;display:none}
+  .card.open .nextlist{display:block}
+  .nextlist .n{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;color:#33424f}
+  .freshness{font-size:10px;color:#9aa7b3;margin-top:8px;text-align:right}
+
+  .banner{background:#fff4e5;border:1px solid #ffd9a8;border-radius:12px;padding:10px 12px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start}
+  .banner .ic{color:var(--late);font-weight:800;font-size:15px;line-height:1.1}
+  .banner .tx{font-size:12.5px;line-height:1.4}
+  .banner .tx b{color:#7a4d12}
+
+  /* rail board */
+  .board .rcard{display:flex;align-items:center;gap:10px;padding:11px 12px}
+  .trk{flex:0 0 auto;width:44px;text-align:center}
+  .trk .lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .trk .num{font-weight:800;font-size:20px;color:var(--septa-dark)}
+  .cars{font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* fare */
+  .balance{background:linear-gradient(135deg,var(--septa),#0072cf);color:#fff;border-radius:16px;padding:18px;margin-bottom:13px}
+  .balance .k{font-size:12px;opacity:.85} .balance .v{font-size:34px;font-weight:800;margin:3px 0 12px}
+  .balance .acts{display:flex;gap:10px}
+  .balance .a{flex:1;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:10px;padding:9px;text-align:center;font-weight:700;font-size:13px;cursor:pointer}
+  .passcard{display:flex;justify-content:space-between;align-items:center}
+  .pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;background:#e6f5ec;color:var(--live)}
+
+  /* plan / cede */
+  .cede{background:#fff;border:1px solid #eef1f4;border-radius:16px;padding:18px;text-align:center;box-shadow:0 1px 3px rgba(20,40,60,.06)}
+  .cede h3{margin:6px 0 4px;font-size:16px}
+  .cede p{font-size:12.5px;color:var(--muted);line-height:1.45;margin:0 auto 14px;max-width:260px}
+  .cta{display:block;width:100%;background:var(--septa);color:#fff;border:none;border-radius:11px;padding:13px;font-weight:700;font-size:14px;margin-bottom:9px;cursor:pointer}
+  .cta.ghost{background:#fff;color:var(--septa);border:1.5px solid var(--septa)}
+  .partner{font-size:11px;color:#9aa7b3;margin-top:6px}
+
+  /* bottom nav */
+  .nav{position:absolute;bottom:0;left:0;right:0;height:74px;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;align-items:center;padding-bottom:10px;z-index:30}
+  .tab{flex:1;text-align:center;color:#9aa7b3;cursor:pointer;font-size:10.5px;font-weight:600;padding-top:9px;transition:.12s}
+  .tab svg{display:block;margin:0 auto 3px;width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .tab.active{color:var(--septa)}
+
+  /* strategy notes */
+  .pin{display:none}
+  body.notes .pin{display:flex;gap:8px;align-items:flex-start;background:#fff8f2;border:1px dashed var(--note);
+    border-radius:10px;padding:9px 11px;margin:0 0 12px;animation:fade .25s}
+  .pin .tag{flex:0 0 auto;font-size:9.5px;font-weight:800;letter-spacing:.5px;color:#fff;background:var(--note);padding:2px 7px;border-radius:5px;text-transform:uppercase;margin-top:1px}
+  .pin .px{font-size:11.5px;line-height:1.42;color:#7a4310}
+  .pin .px b{color:#5a3008}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>SEPTA App — Descoped Concept</h1>
+    <p>A clickable concept for a SEPTA app scoped to what only SEPTA can own and what one developer can sustain. The five tabs <em>are</em> the strategy: keep fare, regional rail, official alerts, and the high-value views the redesign dropped; hand general trip planning to a Transit partnership.</p>
+    <div class="controls">
+      <button class="btn on" id="notesBtn" onclick="toggleNotes()">Strategy notes: ON</button>
+    </div>
+    <div class="legend">Tap the bottom tabs to move between screens. Tap a saved trip on Home to expand it. <b>Orange dashed cards</b> are strategy annotations, not part of the UI — toggle them off to see the clean app.</div>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><span>5G &nbsp; 100%</span></div>
+        <div class="appbar">
+          <div class="badge">S</div>
+          <div style="flex:1">
+            <h2 id="scrTitle">Next to Arrive</h2>
+            <div class="sub" id="scrSub">Your saved trips</div>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- HOME -->
+          <div class="view active" id="v-home">
+            <div class="pin"><span class="tag">Restore</span><span class="px"><b>Next-to-Arrive + favorites, front and center.</b> The #1 dropped capability riders asked for (54 complaints named it). Cheap to rebuild: the data and APIs already exist.</span></div>
+            <div class="banner"><span class="ic">!</span><span class="tx"><b>Service alert:</b> Broad Street Line detouring around City Hall. Tap Alerts for details.</span></div>
+            <div class="sectlabel">Saved trips</div>
+
+            <div class="card tap" onclick="this.classList.toggle('open')">
+              <div class="row">
+                <div class="modechip m-trolley">11</div>
+                <div class="titleline"><div class="t1">Route 11 → Center City</div>
+                  <div class="t2">from 40th St &amp; Baltimore Ave</div>
+                  <span class="status s-live"><span class="dot"></span>LIVE</span></div>
+                <div class="eta"><div class="big">3<span style="font-size:12px"> min</span></div><div class="small">then 18 min</div></div>
+              </div>
+              <div class="nextlist">
+                <div class="n"><span>Next vehicle</span><span>3 min · live</span></div>
+                <div class="n"><span>Following</span><span>18 min · live</span></div>
+                <div class="n"><span>Then</span><span>9:42 · scheduled</span></div>
+                <div class="freshness">Updated 6s ago</div>
+              </div>
+            </div>
+
+            <div class="card tap" onclick="this.classList.toggle('open')">
+              <div class="row">
+                <div class="modechip m-rail">RR</div>
+                <div class="titleline"><div class="t1">Paoli/Thorndale → Suburban Station</div>
+                  <div class="t2">Wayne Station</div>
+                  <span class="status s-live"><span class="dot"></span>ON TIME · LIVE</span></div>
+                <div class="eta"><div class="big">8:15</div><div class="small">Track 3 · 6 cars</div></div>
+              </div>
+              <div class="nextlist">
+                <div class="n"><span>8:15 train</span><span>On time · Track 3</span></div>
+                <div class="n"><span>Next</span><span>8:45 · scheduled</span></div>
+                <div class="freshness">Updated 11s ago</div>
+              </div>
+            </div>
+
+            <div class="card tap" onclick="this.classList.toggle('open')">
+              <div class="row">
+                <div class="modechip m-bus">47</div>
+                <div class="titleline"><div class="t1">Route 47 → South Philadelphia</div>
+                  <div class="t2">from 5th St &amp; Market</div>
+                  <span class="status s-sched">SCHEDULED · not tracked</span></div>
+                <div class="eta"><div class="big">9:42</div><div class="small">no live signal</div></div>
+              </div>
+              <div class="nextlist">
+                <div class="n"><span>Scheduled</span><span>9:42</span></div>
+                <div class="n" style="color:var(--muted)"><span>Live tracking</span><span>unavailable on this route</span></div>
+                <div class="freshness">Showing schedule — we tell you when we don't know</div>
+              </div>
+            </div>
+            <div class="pin"><span class="tag">Honest</span><span class="px"><b>Show confidence, don't fake it.</b> Live vs scheduled is labeled; an untracked route says so plainly. This is the realistic real-time play, since accuracy is upstream and unowned. Don't out-map Transit; be honest.</span></div>
+          </div>
+
+          <!-- RAIL -->
+          <div class="view" id="v-rail">
+            <div class="pin"><span class="tag">Invest</span><span class="px"><b>Regional Rail is SEPTA's real edge.</b> Transit/Google are weak here and train riders are who open and rate the app. Track number, car count, and on-time-by-minutes are exactly what the redesign removed.</span></div>
+            <div class="sectlabel">Departures · Suburban Station</div>
+            <div class="card board">
+              <div class="rcard">
+                <div class="trk"><div class="lbl">Track</div><div class="num">3</div></div>
+                <div class="titleline"><div class="t1">Paoli/Thorndale Line</div><div class="t2">to Malvern · 8:15</div>
+                  <div class="cars">6 cars</div></div>
+                <div class="eta"><span class="status s-live"><span class="dot"></span>ON TIME</span></div>
+              </div>
+            </div>
+            <div class="card board">
+              <div class="rcard">
+                <div class="trk"><div class="lbl">Track</div><div class="num">1</div></div>
+                <div class="titleline"><div class="t1">Lansdale/Doylestown Line</div><div class="t2">to Doylestown · 8:22</div>
+                  <div class="cars">4 cars</div></div>
+                <div class="eta"><span class="status s-late">4 MIN LATE</span></div>
+              </div>
+            </div>
+            <div class="card board">
+              <div class="rcard">
+                <div class="trk"><div class="lbl">Track</div><div class="num">—</div></div>
+                <div class="titleline"><div class="t1">Media/Wawa Line</div><div class="t2">to Wawa · 8:31</div>
+                  <div class="cars">track posts ~10 min before</div></div>
+                <div class="eta"><span class="status s-sched">SCHEDULED</span></div>
+              </div>
+            </div>
+            <div class="card board" style="border-color:#f3cccc">
+              <div class="rcard">
+                <div class="trk"><div class="lbl">Track</div><div class="num">—</div></div>
+                <div class="titleline"><div class="t1">Trenton Line</div><div class="t2">to Trenton · 8:40</div>
+                  <div class="cars" style="color:var(--cancel)">Next train 9:10</div></div>
+                <div class="eta"><span class="status s-cancel">CANCELED</span></div>
+              </div>
+            </div>
+            <div class="pin"><span class="tag">Honest</span><span class="px"><b>Cancellations are loud.</b> A canceled trip is the most severe complaint type (avg severity 2.8). Surfacing it clearly, with the next option, is high-value and app-side.</span></div>
+          </div>
+
+          <!-- ALERTS -->
+          <div class="view" id="v-alerts">
+            <div class="pin"><span class="tag">Keep</span><span class="px"><b>Only SEPTA can issue the official alert.</b> The app's job is to surface them clearly, not to author them. Keep this; the content quality is a Comms/Control Center fix, not an app rebuild.</span></div>
+            <div class="sectlabel">Active service alerts</div>
+            <div class="card" style="border-left:4px solid var(--bsl,#e36209)">
+              <div class="row"><div class="modechip m-bsl">BSL</div>
+                <div class="titleline"><div class="t1">Broad Street Line · Detour</div>
+                  <div class="t2" style="white-space:normal">Southbound trains bypassing City Hall due to track work. Use 15th St or Walnut-Locust.</div></div></div>
+            </div>
+            <div class="card" style="border-left:4px solid var(--cancel)">
+              <div class="row"><div class="modechip m-rail">RR</div>
+                <div class="titleline"><div class="t1">Trenton Line · Canceled trip</div>
+                  <div class="t2" style="white-space:normal">8:40 Trenton departure canceled. Next train 9:10.</div></div></div>
+            </div>
+            <div class="card" style="border-left:4px solid var(--bus)">
+              <div class="row"><div class="modechip m-bus">21</div>
+                <div class="titleline"><div class="t1">Route 21 · Detour</div>
+                  <div class="t2" style="white-space:normal">Detouring off Walnut between 18th and 22nd through 6 PM.</div></div></div>
+            </div>
+            <div class="sectlabel" style="margin-top:14px">Notify me</div>
+            <div class="card"><div class="row"><div class="titleline"><div class="t1">Alerts for my saved trips</div><div class="t2">Push when a saved line is disrupted</div></div>
+              <div style="width:42px;height:25px;background:var(--live);border-radius:20px;position:relative"><div style="position:absolute;right:3px;top:3px;width:19px;height:19px;background:#fff;border-radius:50%"></div></div></div></div>
+          </div>
+
+          <!-- FARE -->
+          <div class="view" id="v-fare">
+            <div class="pin"><span class="tag">Keep · mandatory</span><span class="px"><b>SEPTA Key is agency-only and non-negotiable.</b> The Cubic migration is time-boxed to Aug 28. It's also SEPTA's strongest competitive category. Core kept scope.</span></div>
+            <div class="balance">
+              <div class="k">SEPTA Key · Travel Wallet</div>
+              <div class="v">$12.50</div>
+              <div class="acts"><div class="a">Reload</div><div class="a">Buy ticket</div></div>
+            </div>
+            <div class="sectlabel">My passes</div>
+            <div class="card"><div class="passcard"><div class="titleline"><div class="t1">Monthly TransPass</div><div class="t2">Anywhere · valid through Jun 30</div></div><span class="pill">ACTIVE</span></div></div>
+            <div class="card"><div class="passcard"><div class="titleline"><div class="t1">Regional Rail — Zone 3</div><div class="t2">10-trip · 6 trips left</div></div><span class="pill">ACTIVE</span></div></div>
+            <div class="banner" style="margin-top:6px"><span class="ic">↻</span><span class="tx"><b>Action needed:</b> KeyTix retires Aug 28. Move your balance to the updated SEPTA Key. <u>Start migration</u></span></div>
+            <div class="pin"><span class="tag">Mandatory</span><span class="px"><b>This is the one build the team can't defer.</b> The Cubic cutover has a hard date, so it anchors the near-term roadmap regardless of everything else.</span></div>
+          </div>
+
+          <!-- PLAN (CEDED) -->
+          <div class="view" id="v-plan">
+            <div class="pin"><span class="tag">Cede</span><span class="px"><b>General trip planning is a commodity SEPTA loses.</b> Transit, Google, and Apple already win it and maintain it for free. Hand this off via an official Transit partnership instead of spending one developer to chase parity.</span></div>
+            <div class="cede">
+              <div class="modechip m-rail" style="margin:0 auto;width:48px;height:48px;font-size:15px">↪</div>
+              <h3>Plan a trip across modes</h3>
+              <p>For full multimodal trip planning, live across bus, rail, subway, and bike, open Transit, SEPTA's partner app. Your SEPTA real-time and detours feed it directly.</p>
+              <button class="cta">Open in Transit</button>
+              <button class="cta ghost">Use the web trip planner</button>
+              <div class="partner">Official SEPTA partner · premium unlocked for SEPTA riders</div>
+            </div>
+            <div class="pin"><span class="tag">Why</span><span class="px"><b>What SEPTA pays for:</b> Transit maintains this surface as a branded SEPTA experience, gifts premium to all riders, and ingests SEPTA's detour/real-time data. SEPTA stops carrying code it can't sustain.</span></div>
+          </div>
+        </div>
+
+        <!-- bottom nav -->
+        <div class="nav">
+          <div class="tab active" data-v="home" onclick="go('home',this)">
+            <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</div>
+          <div class="tab" data-v="rail" onclick="go('rail',this)">
+            <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 21l2-3M16 21l-2-3"/></svg>Rail</div>
+          <div class="tab" data-v="alerts" onclick="go('alerts',this)">
+            <svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>Alerts</div>
+          <div class="tab" data-v="fare" onclick="go('fare',this)">
+            <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Fare</div>
+          <div class="tab" data-v="plan" onclick="go('plan',this)">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Plan</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  var titles={
+    home:["Next to Arrive","Your saved trips"],
+    rail:["Regional Rail","Live departure board"],
+    alerts:["Service Alerts","Official SEPTA notices"],
+    fare:["SEPTA Key","Wallet, passes & tickets"],
+    plan:["Plan a Trip","Powered by Transit"]
+  };
+  function go(v,el){
+    document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});
+    document.getElementById('v-'+v).classList.add('active');
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    el.classList.add('active');
+    document.getElementById('scrTitle').textContent=titles[v][0];
+    document.getElementById('scrSub').textContent=titles[v][1];
+    document.querySelector('.body').scrollTop=0;
+  }
+  function toggleNotes(){
+    document.body.classList.toggle('notes');
+    var on=document.body.classList.contains('notes');
+    var b=document.getElementById('notesBtn');
+    b.textContent='Strategy notes: '+(on?'ON':'OFF');
+    b.classList.toggle('on',on);
+  }
+  document.body.classList.add('notes');
+</script>
+</body>
+</html>
