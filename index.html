@@ -3,330 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEPTA App — Descoped Concept (high-fidelity)</title>
+<title>SEPTA App — Current vs Future Concept</title>
 <style>
   :root{
-    --navy:#0b1a30; --navy2:#0a1626; --header:#152747; --card:#0f1b2c; --card2:#13243a;
-    --search:#1a2c46; --line:#22344f; --ink:#ffffff; --muted:#8ca2bb; --muted2:#6c81998;
-    --blue:#4a9bf5; --green:#15a86b; --gold:#ffcb3d; --live:#37d07a; --late:#ffb23d; --cancel:#ff6b6b;
-    --note:#ff7a2f; --pageA:#e9eef3; --pageB:#d7e0e9;
+    --navy:#0b1a30; --header:#152747; --search:#1a2c46; --line:#22344f;
+    --ink:#fff; --muted:#8ca2bb; --blue:#4a9bf5; --green:#15a86b; --gold:#ffcb3d;
+    --live:#37d07a; --late:#ffb23d; --cancel:#ff6b6b; --rail:#7a4fb5;
+    --note:#ff7a2f; --pageA:#eaeff4; --pageB:#d8e1ea;
   }
   *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:linear-gradient(160deg,var(--pageA),var(--pageB));color:#15212e;padding:22px 18px 60px;min-height:100vh}
-
-  .top{max-width:1120px;margin:0 auto 14px}
+    background:linear-gradient(160deg,var(--pageA),var(--pageB));color:#15212e;padding:20px 16px 60px}
+  .top{max-width:1200px;margin:0 auto 12px}
   .top h1{font-size:19px;margin:0 0 4px;color:#0e2a4a}
-  .top p{margin:0;font-size:13px;color:#5b6b7a;max-width:760px}
-  .ftabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 4px}
-  .ftab{border:1px solid #c4ced8;background:#fff;color:#1e3a5c;padding:8px 14px;border-radius:22px;
-    font-size:13px;font-weight:600;cursor:pointer;transition:.14s;display:flex;align-items:center;gap:7px}
-  .ftab:hover{border-color:var(--blue)}
-  .ftab.active{background:#0e2a4a;border-color:#0e2a4a;color:#fff}
+  .top p{margin:0;font-size:12.5px;color:#5b6b7a;max-width:780px;line-height:1.5}
+  .ftabs{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 4px}
+  .ftab{border:1px solid #c4ced8;background:#fff;color:#1e3a5c;padding:8px 13px;border-radius:22px;font-size:13px;font-weight:600;cursor:pointer;transition:.14s;display:flex;align-items:center;gap:7px}
+  .ftab:hover{border-color:var(--blue)} .ftab.active{background:#0e2a4a;border-color:#0e2a4a;color:#fff}
   .ftab .n{width:18px;height:18px;border-radius:50%;background:#e7edf3;color:#0e2a4a;font-size:10px;font-weight:800;display:grid;place-items:center}
   .ftab.active .n{background:rgba(255,255,255,.25);color:#fff}
-  .ctlrow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .ctlrow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:6px}
   .cmttoggle{border:1px solid #c4ced8;background:#fff;color:#0e2a4a;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
   .cmttoggle.on{background:var(--note);border-color:var(--note);color:#fff}
 
-  .stage{max-width:1120px;margin:18px auto 0;display:flex;gap:30px;align-items:flex-start;justify-content:center}
+  .cols{max-width:1200px;margin:16px auto 0;display:flex;gap:26px;align-items:flex-start;justify-content:center}
+  .col{display:flex;flex-direction:column;align-items:center}
+  .colhd{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;padding:4px 12px;border-radius:20px}
+  .hd-cur{background:#dfe6ee;color:#5b6b7a} .hd-fut{background:#0e2a4a;color:#fff} .hd-exp{background:#fff3ec;color:#b3502a;border:1px solid #ffd9c2}
 
-  /* phone */
-  .phonewrap{position:relative;flex:0 0 auto}
-  .phone{width:392px;height:812px;background:#000;border-radius:48px;padding:12px;
-    box-shadow:0 28px 60px rgba(8,30,60,.32),0 4px 12px rgba(0,0,0,.2)}
-  .screen{width:100%;height:100%;background:var(--navy);border-radius:37px;overflow:hidden;display:flex;flex-direction:column;position:relative}
-  .statusbar{height:40px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 5px;font-size:13px;font-weight:600;color:#fff}
-  .appbar{padding:2px 18px 6px;display:flex;align-items:center;gap:8px}
-  .slogo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:17px;letter-spacing:.5px;color:#fff}
-  .slogo .mark{width:22px;height:22px;border-radius:5px;background:#fff;color:var(--header);display:grid;place-items:center;font-weight:900;font-size:14px;font-style:italic}
+  /* phones */
+  .phonewrap{position:relative}
+  .phone{width:312px;height:672px;background:#000;border-radius:44px;padding:11px;box-shadow:0 22px 48px rgba(8,30,60,.3)}
+  .screen{width:100%;height:100%;background:var(--navy);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .curimg{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 
-  .body{flex:1;overflow-y:auto;padding:6px 16px 86px}
+  /* current-state img clickable hint */
+  .swiphint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;font-size:10.5px;padding:4px 10px;border-radius:20px;z-index:5;pointer-events:none}
+
+  .statusbar{height:34px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 4px;font-size:12px;font-weight:600;color:#fff;background:var(--header)}
+  .appbar{padding:2px 15px 6px;display:flex;align-items:center;gap:8px;background:var(--header)}
+  .slogo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px;letter-spacing:.5px;color:#fff}
+  .slogo .mark{width:20px;height:20px;border-radius:5px;background:#fff;color:var(--header);display:grid;place-items:center;font-weight:900;font-size:13px;font-style:italic}
+  .body{flex:1;overflow-y:auto;padding:6px 13px 78px}
   .body::-webkit-scrollbar{width:0}
-  .view{display:none} .view.active{display:block;animation:fade .22s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .fview{display:none} .fview.active{display:block;animation:fade .2s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
 
-  .greet{font-size:25px;font-weight:800;color:#fff;margin:6px 2px 12px}
-  .searchbar{background:var(--search);border-radius:13px;padding:13px 14px;color:#9fb4cc;font-size:15px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .subtabs{display:flex;gap:20px;padding:2px 2px 12px;font-size:14px;font-weight:600;color:var(--muted)}
-  .subtabs .s{cursor:pointer;display:flex;align-items:center;gap:5px}
-  .subtabs .s.active{color:var(--blue)} .subtabs .s.active .dot{width:6px;height:6px;border-radius:50%;background:var(--blue)}
-
-  /* faux map */
-  .map{height:168px;border-radius:14px;margin-bottom:14px;position:relative;overflow:hidden;
-    background:
+  .greet{font-size:20px;font-weight:800;color:#fff;margin:5px 2px 10px}
+  .searchbar{background:var(--search);border-radius:12px;padding:11px 12px;color:#9fb4cc;font-size:13.5px;display:flex;gap:9px;margin-bottom:11px}
+  .subtabs{display:flex;gap:16px;padding:2px 2px 11px;font-size:13px;font-weight:600;color:var(--muted)}
+  .subtabs .s{display:flex;align-items:center;gap:5px} .subtabs .s.active{color:var(--blue)} .subtabs .s.active .dot{width:5px;height:5px;border-radius:50%;background:var(--blue)}
+  .map{height:140px;border-radius:13px;margin-bottom:12px;position:relative;overflow:hidden;background:
       linear-gradient(90deg,transparent 49.4%,#3a4252 49.4%,#3a4252 50.6%,transparent 50.6%),
       linear-gradient(0deg,transparent 49.4%,#3a4252 49.4%,#3a4252 50.6%,transparent 50.6%),
-      linear-gradient(120deg,#39414f,#2b3340);
-    background-size:64px 100%,100% 58px,100% 100%}
-  .map:after{content:"";position:absolute;inset:0;background:
-     repeating-linear-gradient(60deg,transparent 0 38px,rgba(255,255,255,.04) 38px 40px)}
-  .pin{position:absolute;background:#fff;color:#15212e;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-size:11px;font-weight:800;box-shadow:0 2px 5px rgba(0,0,0,.4)}
-  .pin.me{background:var(--blue);width:14px;height:14px;border:3px solid #fff}
-  .expand{position:absolute;right:10px;bottom:9px;color:var(--blue);font-weight:700;font-size:13px;background:rgba(11,26,48,.7);padding:5px 9px;border-radius:8px}
-
-  /* stop / trip cards (near-black, real app) */
-  .stopcard{background:#0c1626;border:1px solid #16243a;border-radius:14px;padding:13px 14px;margin-bottom:11px;cursor:pointer;transition:.12s}
-  .stopcard:active{transform:scale(.992)}
+      linear-gradient(120deg,#39414f,#2b3340);background-size:56px 100%,100% 50px,100% 100%}
+  .pin{position:absolute;background:#fff;color:#15212e;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;font-size:10px;font-weight:800}
+  .pin.me{background:var(--blue);width:13px;height:13px;border:3px solid #fff}
+  .expand{position:absolute;right:9px;bottom:8px;color:var(--blue);font-weight:700;font-size:11.5px;background:rgba(11,26,48,.7);padding:4px 8px;border-radius:7px}
+  .secthead{font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-transform:uppercase;margin:7px 2px 8px}
+  .stopcard{background:#0c1626;border:1px solid #16243a;border-radius:13px;padding:11px 12px;margin-bottom:9px}
   .schead{display:flex;justify-content:space-between;align-items:flex-start}
-  .schead .name{font-weight:700;font-size:15px;color:#fff}
-  .schead .meta{font-size:12px;color:var(--muted);margin-top:2px}
-  .nextlbl{font-size:11px;color:var(--muted);font-weight:600}
-  .pills{display:flex;flex-direction:column;gap:7px;margin-top:10px}
-  .pillrow{display:flex;align-items:center;gap:9px;justify-content:flex-end}
-  .rc{width:26px;height:26px;border-radius:50%;background:#fff;color:#15212e;font-weight:800;font-size:12px;display:grid;place-items:center;flex:0 0 auto}
-  .rc.rail{background:var(--rail,#7a4fb5);color:#fff}
-  .tpill{background:#fff;color:#15212e;border-radius:9px;padding:6px 11px;font-weight:800;font-size:15px;min-width:78px;text-align:center}
+  .schead .name{font-weight:700;font-size:13.5px;color:#fff} .schead .meta{font-size:11px;color:var(--muted);margin-top:2px}
+  .nextlbl{font-size:10px;color:var(--muted);font-weight:600}
+  .pills{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .pillrow{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .rc{width:23px;height:23px;border-radius:50%;background:#fff;color:#15212e;font-weight:800;font-size:11px;display:grid;place-items:center;flex:0 0 auto}
+  .rc.rail{background:var(--rail);color:#fff}
+  .tpill{background:#fff;color:#15212e;border-radius:8px;padding:5px 10px;font-weight:800;font-size:13.5px;min-width:68px;text-align:center}
   .tpill.sched{background:#26344a;color:#aebfd2;font-weight:700}
-  .sig{color:var(--live);font-size:13px;margin-left:2px}
-  .modeic{width:34px;height:34px;border-radius:9px;background:#16243a;display:grid;place-items:center;color:var(--muted);font-size:15px;flex:0 0 auto}
-  .statetag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;margin-top:6px}
-  .t-live{background:rgba(55,208,122,.14);color:var(--live)} .t-live .d{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.4s infinite}
+  .sig{color:var(--live);font-size:12px}
+  .statetag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:5px}
+  .t-live{background:rgba(55,208,122,.14);color:var(--live)} .t-live .d{width:6px;height:6px;border-radius:50%;background:var(--live);animation:pulse 1.4s infinite}
   .t-late{background:rgba(255,178,61,.15);color:var(--late)} .t-sched{background:#1c2c44;color:#9fb4cc} .t-cancel{background:rgba(255,107,107,.16);color:var(--cancel)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-  .secthead{font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-transform:uppercase;margin:8px 2px 9px}
-  .banner{background:rgba(255,178,61,.12);border:1px solid rgba(255,178,61,.4);border-radius:12px;padding:11px 12px;display:flex;gap:9px;margin-bottom:13px;color:#ffd89a;font-size:12.5px;line-height:1.4}
-  .banner b{color:#ffe2b0}
-
-  /* rail board */
-  .rcard{display:flex;align-items:center;gap:11px;background:#0c1626;border:1px solid #16243a;border-radius:14px;padding:12px;margin-bottom:11px}
-  .trk{flex:0 0 auto;width:46px;text-align:center;border-right:1px solid #1c2c44;padding-right:8px}
-  .trk .l{font-size:9px;color:var(--muted);text-transform:uppercase} .trk .n{font-weight:800;font-size:21px;color:#fff}
-  .rmid{flex:1;min-width:0} .rmid .l1{font-weight:700;font-size:14.5px;color:#fff} .rmid .l2{font-size:12px;color:var(--muted);margin-top:1px} .rmid .l3{font-size:11px;color:var(--muted);margin-top:3px}
-
-  /* fare */
-  .keycard{background:linear-gradient(135deg,#0f7a4c,#15a86b);border-radius:16px;padding:18px;margin-bottom:13px;color:#fff}
-  .keycard .k{font-size:12px;opacity:.9} .keycard .v{font-size:33px;font-weight:800;margin:3px 0 13px}
-  .keyacts{display:flex;gap:10px} .keyacts .a{flex:1;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:10px;padding:10px;text-align:center;font-weight:700;font-size:13.5px;cursor:pointer}
-  .passcard{background:#0c1626;border:1px solid #16243a;border-radius:13px;padding:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-  .passcard .l1{font-weight:700;color:#fff;font-size:14px} .passcard .l2{font-size:12px;color:var(--muted);margin-top:2px}
-  .actpill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(55,208,122,.15);color:var(--live)}
-
-  /* plan / cede */
-  .cede{background:#0c1626;border:1px solid #16243a;border-radius:16px;padding:20px;text-align:center}
-  .cede .ic{width:50px;height:50px;border-radius:13px;background:#13243a;display:grid;place-items:center;margin:0 auto 10px;font-size:20px}
-  .cede h3{margin:4px 0;font-size:16px;color:#fff} .cede p{font-size:12.5px;color:var(--muted);line-height:1.45;max-width:270px;margin:0 auto 15px}
-  .cta{display:block;width:100%;border:none;border-radius:11px;padding:13px;font-weight:700;font-size:14px;margin-bottom:9px;cursor:pointer;background:var(--green);color:#fff}
-  .cta.ghost{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
-  .partner{font-size:11px;color:var(--muted);margin-top:7px}
-
-  /* bottom nav */
-  .nav{position:absolute;bottom:0;left:0;right:0;height:76px;background:#0a1830;border-top:1px solid #1b2c45;
-    display:flex;justify-content:space-around;align-items:center;padding-bottom:12px;z-index:20}
-  .tab{flex:1;text-align:center;color:#6b81999;color:#6c8199;cursor:pointer;font-size:10.5px;font-weight:600;padding-top:9px}
-  .tab svg{display:block;margin:0 auto 3px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .modeic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;flex:0 0 auto}
+  .rcard{display:flex;align-items:center;gap:10px;background:#0c1626;border:1px solid #16243a;border-radius:13px;padding:11px;margin-bottom:9px}
+  .trk{width:40px;text-align:center;border-right:1px solid #1c2c44;padding-right:7px;flex:0 0 auto}
+  .trk .l{font-size:8px;color:var(--muted);text-transform:uppercase} .trk .n{font-weight:800;font-size:18px;color:#fff}
+  .rmid{flex:1;min-width:0} .rmid .l1{font-weight:700;font-size:13px;color:#fff} .rmid .l2{font-size:11px;color:var(--muted)} .rmid .l3{font-size:10px;color:var(--muted);margin-top:2px}
+  .keycard{background:linear-gradient(135deg,#0f7a4c,#15a86b);border-radius:15px;padding:16px;margin-bottom:11px;color:#fff}
+  .keycard .k{font-size:11px;opacity:.9} .keycard .v{font-size:29px;font-weight:800;margin:3px 0 11px}
+  .keyacts{display:flex;gap:9px} .keyacts .a{flex:1;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:9px;padding:9px;text-align:center;font-weight:700;font-size:12.5px}
+  .passcard{background:#0c1626;border:1px solid #16243a;border-radius:12px;padding:11px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+  .passcard .l1{font-weight:700;color:#fff;font-size:13px} .passcard .l2{font-size:11px;color:var(--muted)}
+  .actpill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(55,208,122,.15);color:var(--live)}
+  .banner{background:rgba(255,178,61,.12);border:1px solid rgba(255,178,61,.4);border-radius:11px;padding:10px 11px;display:flex;gap:8px;margin-top:7px;color:#ffd89a;font-size:11.5px;line-height:1.4} .banner b{color:#ffe2b0}
+  .cede{background:#0c1626;border:1px solid #16243a;border-radius:15px;padding:18px;text-align:center}
+  .cede .ic{width:44px;height:44px;border-radius:12px;background:#13243a;display:grid;place-items:center;margin:0 auto 9px;font-size:18px}
+  .cede h3{margin:4px 0;font-size:14.5px;color:#fff} .cede p{font-size:11.5px;color:var(--muted);line-height:1.45;margin:0 auto 13px}
+  .cta{display:block;width:100%;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:13px;margin-bottom:8px;background:var(--green);color:#fff} .cta.ghost{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+  .partner{font-size:10.5px;color:var(--muted);margin-top:6px}
+  .nav{position:absolute;bottom:0;left:0;right:0;height:64px;background:#0a1830;border-top:1px solid #1b2c45;display:flex;justify-content:space-around;align-items:center;padding-bottom:8px;z-index:6}
+  .tab{flex:1;text-align:center;color:#6c8199;font-size:9.5px;font-weight:600;padding-top:7px}
+  .tab svg{display:block;margin:0 auto 2px;width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .tab.active{color:var(--blue)}
 
-  /* click indicator */
-  .clickdot{position:absolute;z-index:35;width:34px;height:34px;pointer-events:none;display:none}
-  body.coach .clickdot.show{display:block}
-  .clickdot .ring{position:absolute;inset:0;border:3px solid var(--note);border-radius:50%;animation:ring 1.5s infinite}
-  .clickdot .core{position:absolute;inset:10px;background:var(--note);border-radius:50%}
-  .clickdot .cap{position:absolute;left:40px;top:4px;white-space:nowrap;background:var(--note);color:#fff;font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;box-shadow:0 3px 8px rgba(0,0,0,.3)}
-  @keyframes ring{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.6);opacity:0}}
+  /* OUTSIDE-the-screen callout markers (Flyway style) */
+  .callout{position:absolute;left:-26px;z-index:8;display:none}
+  body.coach .callout{display:block}
+  .callout .mk{position:absolute;left:0;top:-13px;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;box-shadow:0 3px 7px rgba(0,0,0,.25)}
+  .callout .lead{position:absolute;left:26px;top:0;width:34px;height:2px;background:var(--note)}
+  .callout .lead:after{content:"";position:absolute;right:-2px;top:-2px;width:6px;height:6px;border-radius:50%;background:var(--note)}
 
-  /* comments panel */
-  .panel{flex:0 0 340px;background:#fff;border:1px solid #d8e0e9;border-radius:16px;box-shadow:0 8px 24px rgba(20,50,80,.08);overflow:hidden;align-self:stretch}
-  body:not(.coach) .clickdot{display:none}
-  .panel.hidden{display:none}
-  .panelhd{background:#0e2a4a;color:#fff;padding:14px 16px}
-  .panelhd .ttl{font-size:15px;font-weight:700}
-  .panelhd .hint{font-size:12px;margin-top:6px;background:rgba(255,122,47,.22);border:1px solid rgba(255,122,47,.5);color:#ffd9c2;border-radius:8px;padding:6px 9px;display:flex;gap:7px;align-items:center}
-  .panelbody{padding:14px;max-height:712px;overflow-y:auto}
-  .comment{margin-bottom:14px}
-  .chead{display:flex;align-items:center;gap:9px;margin-bottom:6px}
-  .avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;flex:0 0 auto}
+  /* explainer column */
+  .exp{flex:0 0 330px}
+  .expcard{background:#fff;border:1px solid #d8e0e9;border-radius:14px;box-shadow:0 6px 18px rgba(20,50,80,.07);overflow:hidden}
+  .exphd{background:#0e2a4a;color:#fff;padding:13px 15px;font-size:14.5px;font-weight:700}
+  .expbody{padding:14px 15px}
+  .diff{font-size:12.5px;line-height:1.5;color:#33424f;background:#f5f8fb;border-left:3px solid var(--blue);padding:9px 11px;border-radius:0 8px 8px 0;margin-bottom:14px}
+  .diff b{color:#15212e}
+  .conote{display:flex;gap:9px;margin-bottom:11px}
+  .conote .cn{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--note);color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center}
+  .conote .ct{font-size:12px;line-height:1.45;color:#33424f} .conote .ct b{color:#15212e}
+  .whyhd{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#9aa7b3;margin:14px 0 9px;border-top:1px dashed #e4e9ee;padding-top:12px}
+  .why{margin-bottom:12px}
+  .whead{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .avatar{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;color:#fff}
   .av-j{background:#3a6ea5} .av-k{background:#8e4ca8} .av-y{background:#0f7a4c}
-  .cwho{font-size:12.5px;font-weight:700;color:#1e3a5c}
-  .cwhen{font-size:10.5px;color:#9aa7b3}
-  .tagchip{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:5px;color:#fff;margin-left:auto}
+  .cwho{font-size:12px;font-weight:700;color:#1e3a5c} .cwhen{font-size:10px;color:#9aa7b3}
+  .tagchip{font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:2px 6px;border-radius:5px;color:#fff;margin-left:auto}
   .tg-keep{background:#2a8f5a} .tg-restore{background:#d97706} .tg-cede{background:#b3402a} .tg-honest{background:#2563a8} .tg-invest{background:#7a3fb0} .tg-why{background:#5b6b7a}
-  .ctext{font-size:12.5px;line-height:1.5;color:#33424f;padding-left:37px}
-  .ctext b{color:#15212e}
-  .resolved{font-size:11px;color:#9aa7b3;padding:8px 0 0 37px;border-top:1px dashed #e4e9ee;margin-top:2px}
-  .addnote{margin:6px 14px 14px;border:1px solid #e0e6ec;border-radius:10px;padding:9px 11px;font-size:12px;color:#9aa7b3}
+  .wtext{font-size:11.5px;line-height:1.5;color:#33424f;padding-left:32px} .wtext b{color:#15212e}
 </style>
 </head>
 <body class="coach">
   <div class="top">
-    <h1>SEPTA App — Descoped Concept <span style="font-weight:500;color:#6b8199;font-size:14px">· high-fidelity wireframe</span></h1>
-    <p>Rendered in the real app's visual language (dark theme, greeting home, route pills, 5-tab nav) but reorganized to the descoped strategy. The feature tabs below tour the screens; the panel on the right is the running commentary; the orange pulse shows what to try on each screen.</p>
+    <h1>SEPTA App — Current vs Future Concept</h1>
+    <p>Left is the app as it ships today (real screenshots). Middle is a future concept scoped to what only SEPTA can own and one developer can sustain. Right explains what changes on each screen and why. Use the feature tabs to move all three columns to the same rider job. Notes sit outside the screens; everything inside a phone is real UI.</p>
     <div class="ftabs" id="ftabs"></div>
     <div class="ctlrow">
-      <div style="font-size:11.5px;color:#7a8ca0">Concept with mock data, not a spec. Real screenshots in the ATLAS drive informed the look.</div>
-      <button class="cmttoggle on" id="cmtBtn" onclick="toggleC()">Comments &amp; coach marks: ON</button>
+      <div style="font-size:11px;color:#7a8ca0">Current = actual app screenshots from the ATLAS drive. Future = concept with mock data, not a spec.</div>
+      <button class="cmttoggle on" id="cmtBtn" onclick="toggleC()">Callout markers: ON</button>
     </div>
   </div>
 
-  <div class="stage">
-    <div class="phonewrap">
-      <div class="phone"><div class="screen">
-        <div class="statusbar" style="background:var(--header)"><span>2:39</span><span>5G &nbsp;100%</span></div>
-        <div class="appbar" style="background:var(--header)"><div class="slogo"><span class="mark">S</span>SEPTA</div></div>
-        <div class="body" id="phoneBody">
+  <div class="cols">
+    <!-- COLUMN 1: CURRENT -->
+    <div class="col">
+      <div class="colhd hd-cur">Current state</div>
+      <div class="phonewrap"><div class="phone"><div class="screen">
+        <img class="curimg" id="curImg" src="screens/cur_home.png" alt="current SEPTA app screen" onclick="nextJob()">
+        <div class="swiphint">tap to see the next screen →</div>
+      </div></div></div>
+    </div>
 
-          <!-- HOME -->
-          <div class="view active" id="v-home">
+    <!-- COLUMN 2: FUTURE -->
+    <div class="col">
+      <div class="colhd hd-fut">Future concept</div>
+      <div class="phonewrap" id="futWrap"><div class="phone"><div class="screen">
+        <div class="statusbar"><span>2:39</span><span>5G&nbsp;100%</span></div>
+        <div class="appbar"><div class="slogo"><span class="mark">S</span>SEPTA</div></div>
+        <div class="body" id="futBody">
+
+          <div class="fview active" id="f-home">
             <div class="greet">Good Afternoon ☀️</div>
-            <div class="searchbar">🔍 &nbsp;Plan your trip to…</div>
+            <div class="searchbar">🔍 Plan your trip to…</div>
             <div class="subtabs"><span class="s active">Favorites <span class="dot"></span></span><span class="s">Nearby</span><span class="s">Alerts</span></div>
-            <div class="map">
-              <div class="pin" style="left:22%;top:30%">11</div>
-              <div class="pin" style="left:64%;top:24%">47</div>
-              <div class="pin me" style="left:46%;top:52%"></div>
-              <div class="pin" style="left:38%;top:70%">RR</div>
-              <div class="expand">⤢ Expand Map</div>
-            </div>
+            <div class="map"><div class="pin" style="left:22%;top:30%">11</div><div class="pin" style="left:64%;top:24%">47</div><div class="pin me" style="left:46%;top:52%"></div><div class="pin" style="left:38%;top:70%">RR</div><div class="expand">⤢ Expand Map</div></div>
             <div class="secthead">Saved trips</div>
-
-            <div class="stopcard" id="homeCard" onclick="this.classList.toggle('open')">
-              <div class="schead"><div><div class="name">Route 11 → Center City</div><div class="meta">40th St &amp; Baltimore Ave · 0.1 mi</div>
-                <span class="statetag t-live"><span class="d"></span>LIVE</span></div><div class="nextlbl">Next</div></div>
-              <div class="pills">
-                <div class="pillrow"><div class="rc">11</div><div class="tpill">3 min<span class="sig">⌁</span></div></div>
-                <div class="pillrow"><div class="rc">11</div><div class="tpill">18 min</div></div>
-              </div>
-            </div>
-
-            <div class="stopcard">
-              <div class="schead"><div><div class="name">Paoli/Thorndale → Suburban</div><div class="meta">Wayne Station</div>
-                <span class="statetag t-live"><span class="d"></span>ON TIME · LIVE</span></div><div class="nextlbl">Next</div></div>
-              <div class="pills">
-                <div class="pillrow"><div class="rc rail" style="background:#7a4fb5;color:#fff">RR</div><div class="tpill">8:15</div></div>
-                <div class="pillrow"><span style="font-size:11px;color:var(--muted);margin-right:auto;padding-left:2px">Track 3 · 6 cars</span><div class="rc rail" style="background:#7a4fb5;color:#fff">RR</div><div class="tpill sched">8:45</div></div>
-              </div>
-            </div>
-
-            <div class="stopcard">
-              <div class="schead"><div><div class="name">Route 47 → South Philadelphia</div><div class="meta">5th St &amp; Market · 0.2 mi</div>
-                <span class="statetag t-sched">SCHEDULED · not tracked</span></div><div class="nextlbl">Next</div></div>
-              <div class="pills"><div class="pillrow"><div class="rc">47</div><div class="tpill sched">9:42</div></div>
-                <div class="pillrow"><span style="font-size:11px;color:var(--muted);margin-right:auto;padding-left:2px">No live signal on this route</span></div></div>
-            </div>
+            <div class="stopcard"><div class="schead"><div><div class="name">Route 11 → Center City</div><div class="meta">40th &amp; Baltimore · 0.1 mi</div><span class="statetag t-live"><span class="d"></span>LIVE</span></div><div class="nextlbl">Next</div></div>
+              <div class="pills"><div class="pillrow"><div class="rc">11</div><div class="tpill">3 min<span class="sig">⌁</span></div></div><div class="pillrow"><div class="rc">11</div><div class="tpill">18 min</div></div></div></div>
+            <div class="stopcard"><div class="schead"><div><div class="name">Paoli/Thorndale → Suburban</div><div class="meta">Wayne Station</div><span class="statetag t-live"><span class="d"></span>ON TIME · LIVE</span></div><div class="nextlbl">Next</div></div>
+              <div class="pills"><div class="pillrow"><div class="rc rail">RR</div><div class="tpill">8:15</div></div><div class="pillrow"><span style="font-size:10px;color:var(--muted);margin-right:auto">Track 3 · 6 cars</span><div class="rc rail">RR</div><div class="tpill sched">8:45</div></div></div></div>
+            <div class="stopcard"><div class="schead"><div><div class="name">Route 47 → South Philly</div><div class="meta">5th &amp; Market · 0.2 mi</div><span class="statetag t-sched">SCHEDULED · not tracked</span></div><div class="nextlbl">Next</div></div>
+              <div class="pills"><div class="pillrow"><div class="rc">47</div><div class="tpill sched">9:42</div></div><div class="pillrow"><span style="font-size:10px;color:var(--muted);margin-right:auto">No live signal on this route</span></div></div></div>
           </div>
 
-          <!-- REAL-TIME -->
-          <div class="view" id="v-rt">
-            <div class="greet" style="font-size:21px">Route 11 · Live</div>
+          <div class="fview" id="f-rt">
+            <div class="greet" style="font-size:17px">Route 11 · Live</div>
             <div class="subtabs"><span class="s active">Toward Center City <span class="dot"></span></span><span class="s">Toward Darby</span></div>
             <div class="map"><div class="pin" style="left:30%;top:40%">11</div><div class="pin" style="left:55%;top:62%">11</div><div class="pin me" style="left:44%;top:30%"></div><div class="expand">⤢ Expand Map</div></div>
             <div class="secthead">Next vehicles · 40th &amp; Baltimore</div>
-            <div class="stopcard"><div class="schead"><div><div class="name">Toward Center City</div><div class="meta">Vehicle 4122</div><span class="statetag t-live"><span class="d"></span>LIVE · updated 6s ago</span></div><div class="tpill">3 min</div></div></div>
+            <div class="stopcard"><div class="schead"><div><div class="name">Toward Center City</div><div class="meta">Vehicle 4122</div><span class="statetag t-live"><span class="d"></span>LIVE · 6s ago</span></div><div class="tpill">3 min</div></div></div>
             <div class="stopcard"><div class="schead"><div><div class="name">Toward Center City</div><div class="meta">Vehicle 4090</div><span class="statetag t-live"><span class="d"></span>LIVE</span></div><div class="tpill">18 min</div></div></div>
-            <div class="stopcard"><div class="schead"><div><div class="name">Toward Center City</div><div class="meta">Scheduled trip · no vehicle reporting</div><span class="statetag t-sched">UNCERTAIN · showing schedule</span></div><div class="tpill sched">9:42</div></div></div>
+            <div class="stopcard"><div class="schead"><div><div class="name">Toward Center City</div><div class="meta">No vehicle reporting</div><span class="statetag t-sched">UNCERTAIN · schedule</span></div><div class="tpill sched">9:42</div></div></div>
           </div>
 
-          <!-- RAIL -->
-          <div class="view" id="v-rail">
-            <div class="greet" style="font-size:21px">Regional Rail</div>
+          <div class="fview" id="f-rail">
+            <div class="greet" style="font-size:17px">Regional Rail</div>
             <div class="secthead">Departures · Suburban Station</div>
-            <div class="rcard"><div class="trk"><div class="l">Track</div><div class="n">3</div></div><div class="rmid"><div class="l1">Paoli/Thorndale Line</div><div class="l2">to Malvern · 8:15</div><div class="l3">6 cars</div></div><span class="statetag t-live"><span class="d"></span>ON TIME</span></div>
+            <div class="rcard"><div class="trk"><div class="l">Track</div><div class="n">3</div></div><div class="rmid"><div class="l1">Paoli/Thorndale</div><div class="l2">to Malvern · 8:15</div><div class="l3">6 cars</div></div><span class="statetag t-live"><span class="d"></span>ON TIME</span></div>
             <div class="rcard"><div class="trk"><div class="l">Track</div><div class="n">1</div></div><div class="rmid"><div class="l1">Lansdale/Doylestown</div><div class="l2">to Doylestown · 8:22</div><div class="l3">4 cars</div></div><span class="statetag t-late">4 MIN LATE</span></div>
-            <div class="rcard"><div class="trk"><div class="l">Track</div><div class="n">—</div></div><div class="rmid"><div class="l1">Media/Wawa Line</div><div class="l2">to Wawa · 8:31</div><div class="l3">track posts ~10 min before</div></div><span class="statetag t-sched">SCHEDULED</span></div>
+            <div class="rcard"><div class="trk"><div class="l">Track</div><div class="n">—</div></div><div class="rmid"><div class="l1">Media/Wawa</div><div class="l2">to Wawa · 8:31</div><div class="l3">track posts ~10 min before</div></div><span class="statetag t-sched">SCHEDULED</span></div>
             <div class="rcard" style="border-color:#5a2330"><div class="trk"><div class="l">Track</div><div class="n">—</div></div><div class="rmid"><div class="l1">Trenton Line</div><div class="l2">to Trenton · 8:40</div><div class="l3" style="color:var(--cancel)">Next train 9:10</div></div><span class="statetag t-cancel">CANCELED</span></div>
           </div>
 
-          <!-- ALERTS -->
-          <div class="view" id="v-alerts">
-            <div class="greet" style="font-size:21px">Service Alerts</div>
+          <div class="fview" id="f-alerts">
+            <div class="greet" style="font-size:17px">Service Alerts</div>
             <div class="secthead">Active now</div>
-            <div class="stopcard" style="border-left:3px solid #e36209"><div class="row" style="display:flex;gap:11px"><div class="modeic" style="background:#e36209;color:#fff">BSL</div><div><div class="name">Broad Street Line · Detour</div><div class="meta" style="white-space:normal">Southbound bypassing City Hall for track work. Use 15th St or Walnut-Locust.</div></div></div></div>
-            <div class="stopcard" style="border-left:3px solid var(--cancel)"><div style="display:flex;gap:11px"><div class="modeic" style="background:#7a4fb5;color:#fff">RR</div><div><div class="name">Trenton Line · Canceled trip</div><div class="meta" style="white-space:normal">8:40 Trenton departure canceled. Next train 9:10.</div></div></div></div>
-            <div class="stopcard" style="border-left:3px solid var(--green)"><div style="display:flex;gap:11px"><div class="modeic" style="background:#15a86b;color:#fff">21</div><div><div class="name">Route 21 · Detour</div><div class="meta" style="white-space:normal">Off Walnut between 18th and 22nd through 6 PM.</div></div></div></div>
-            <div class="secthead" style="margin-top:14px">Notify me</div>
-            <div class="passcard"><div><div class="l1">Alerts for my saved trips</div><div class="l2">Push when a saved line is disrupted</div></div><div style="width:42px;height:25px;background:var(--live);border-radius:20px;position:relative"><div style="position:absolute;right:3px;top:3px;width:19px;height:19px;background:#fff;border-radius:50%"></div></div></div>
+            <div class="stopcard" style="border-left:3px solid #e36209"><div style="display:flex;gap:10px"><div class="modeic" style="background:#e36209">BSL</div><div><div class="name">Broad Street Line · Detour</div><div class="meta" style="white-space:normal">Southbound bypassing City Hall. Use 15th St or Walnut-Locust.</div></div></div></div>
+            <div class="stopcard" style="border-left:3px solid var(--cancel)"><div style="display:flex;gap:10px"><div class="modeic" style="background:var(--rail)">RR</div><div><div class="name">Trenton Line · Canceled</div><div class="meta" style="white-space:normal">8:40 departure canceled. Next train 9:10.</div></div></div></div>
+            <div class="stopcard" style="border-left:3px solid var(--green)"><div style="display:flex;gap:10px"><div class="modeic" style="background:var(--green)">21</div><div><div class="name">Route 21 · Detour</div><div class="meta" style="white-space:normal">Off Walnut, 18th–22nd, through 6 PM.</div></div></div></div>
+            <div class="secthead" style="margin-top:12px">Notify me</div>
+            <div class="passcard"><div><div class="l1">Alerts for my saved trips</div><div class="l2">Push when a saved line is disrupted</div></div><div style="width:38px;height:22px;background:var(--live);border-radius:20px;position:relative"><div style="position:absolute;right:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%"></div></div></div>
           </div>
 
-          <!-- FARE -->
-          <div class="view" id="v-fare">
-            <div class="greet" style="font-size:21px">SEPTA Key</div>
+          <div class="fview" id="f-fare">
+            <div class="greet" style="font-size:17px">SEPTA Key</div>
             <div class="keycard"><div class="k">Travel Wallet</div><div class="v">$12.50</div><div class="keyacts"><div class="a">Reload</div><div class="a">Buy ticket</div></div></div>
             <div class="secthead">My passes</div>
-            <div class="passcard"><div><div class="l1">Monthly TransPass</div><div class="l2">Anywhere · valid through Jun 30</div></div><span class="actpill">ACTIVE</span></div>
+            <div class="passcard"><div><div class="l1">Monthly TransPass</div><div class="l2">Anywhere · through Jun 30</div></div><span class="actpill">ACTIVE</span></div>
             <div class="passcard"><div><div class="l1">Regional Rail — Zone 3</div><div class="l2">10-trip · 6 left</div></div><span class="actpill">ACTIVE</span></div>
-            <div class="banner" style="margin-top:8px">↻ <span><b>Action needed:</b> KeyTix retires Aug 28. Move your balance to the updated SEPTA Key. <u>Start migration</u></span></div>
+            <div class="banner">↻ <span><b>Action needed:</b> KeyTix retires Aug 28. Move your balance to the updated SEPTA Key.</span></div>
           </div>
 
-          <!-- PLAN -->
-          <div class="view" id="v-plan">
-            <div class="greet" style="font-size:21px">Plan a Trip</div>
-            <div class="searchbar">🔍 &nbsp;Where to?</div>
-            <div class="cede">
-              <div class="ic">↪</div>
-              <h3>Plan a trip across modes</h3>
-              <p>For full multimodal trip planning, live across bus, rail, subway, and bike, open Transit, SEPTA's partner app. Your SEPTA real-time and detours feed it directly.</p>
-              <button class="cta">Open in Transit</button>
-              <button class="cta ghost">Use the web trip planner</button>
-              <div class="partner">Official SEPTA partner · premium unlocked for SEPTA riders</div>
-            </div>
+          <div class="fview" id="f-plan">
+            <div class="greet" style="font-size:17px">Plan a Trip</div>
+            <div class="searchbar">🔍 Where to?</div>
+            <div class="cede"><div class="ic">↪</div><h3>Plan a trip across modes</h3>
+              <p>For full multimodal planning, live across bus, rail, subway, and bike, open Transit, SEPTA's partner app. Your SEPTA real-time and detours feed it directly.</p>
+              <button class="cta">Open in Transit</button><button class="cta ghost">Use the web trip planner</button>
+              <div class="partner">Official SEPTA partner · premium unlocked for riders</div></div>
           </div>
 
         </div>
-
-        <!-- click indicator -->
-        <div class="clickdot" id="cdot"><div class="ring"></div><div class="core"></div><div class="cap" id="cdcap">Tap</div></div>
-
-        <!-- bottom nav -->
         <div class="nav" id="nav"></div>
       </div></div>
+        <!-- callout markers (outside the screen) -->
+        <div id="callouts"></div>
+      </div>
     </div>
 
-    <!-- comments panel -->
-    <div class="panel" id="panel">
-      <div class="panelhd"><div class="ttl" id="pTitle">Home · Next to Arrive</div>
-        <div class="hint" id="pHint">⌁ Try: tap a saved trip to expand it</div></div>
-      <div class="panelbody" id="pBody"></div>
-      <div class="addnote">＋ Add a note…</div>
+    <!-- COLUMN 3: EXPLAINER -->
+    <div class="col exp">
+      <div class="colhd hd-exp">What changes &amp; why</div>
+      <div class="expcard">
+        <div class="exphd" id="expTitle">Home · Next to Arrive</div>
+        <div class="expbody">
+          <div class="diff" id="expDiff"></div>
+          <div id="expNotes"></div>
+          <div class="whyhd">Why</div>
+          <div id="expWhy"></div>
+        </div>
+      </div>
     </div>
   </div>
 
 <script>
-  var SCREENS=[
-    {id:"home", n:1, tab:"Home", navIcon:0, title:"Home · Next to Arrive",
-     hint:"Try: tap a saved trip to expand it",
-     click:{sel:"#homeCard", x:48,y:602, cap:"Tap a saved trip to expand"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"restore",tg:"tg-restore",t:"<b>Next-to-Arrive + favorites, front and center.</b> The #1 dropped capability riders asked for (54 complaints named it). Cheap to rebuild — the data and APIs already exist."},
-      {who:"Jules",av:"j",when:"just now",tag:"honest",tg:"tg-honest",t:"<b>Show confidence, don't fake it.</b> Live, scheduled, and not-tracked are labeled. Route 47 says 'no live signal' instead of inventing a time."},
-      {who:"Kristin",av:"k",when:"1m",tag:"keep",tg:"tg-keep",t:"Matches the real app's home (greeting, search, Favorites/Nearby/Alerts). We're reorganizing, not redesigning from scratch."}
-     ]},
-    {id:"rt", n:2, tab:"Real-Time", navIcon:1, title:"Real-Time · one route",
-     hint:"Try: switch direction with the sub-tabs",
-     click:{sel:".subtabs", x:40,y:128, cap:"Switch direction"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"honest",tg:"tg-honest",t:"<b>Degrade honestly.</b> A scheduled trip with no vehicle reporting is flagged UNCERTAIN, not shown as a confident arrival. This is the realistic real-time play."},
-      {who:"Yannick",av:"y",when:"interview",tag:"why",tg:"tg-why",t:"Grounded in Yannick: trains/routes silently drop off the feed and riders can't tell. Better to say 'we don't know' than show a phantom."},
-      {who:"Jules",av:"j",when:"just now",tag:"cede",tg:"tg-cede",t:"Don't try to out-map Transit here. Our edge is honesty about our own service, not a slicker live map."}
-     ]},
-    {id:"rail", n:3, tab:"Regional Rail", navIcon:1, title:"Regional Rail · departures",
-     hint:"This is the invest bet — scan the board",
-     click:{sel:".rcard", x:44,y:150, cap:"Track · cars · status"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"invest",tg:"tg-invest",t:"<b>Regional Rail is SEPTA's real edge.</b> Transit/Google are weak here, and train riders are who open and rate the app. Track number, car count, on-time-by-minutes — exactly what the redesign removed."},
-      {who:"Jules",av:"j",when:"just now",tag:"honest",tg:"tg-honest",t:"<b>Cancellations are loud.</b> A canceled trip is the most severe complaint type (avg severity 2.8). Surface it clearly with the next option."}
-     ]},
-    {id:"alerts", n:4, tab:"Alerts", navIcon:2, title:"Service Alerts",
-     hint:"Official notices — agency-only",
-     click:{sel:".stopcard", x:44,y:150, cap:"Tap an alert"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"keep",tg:"tg-keep",t:"<b>Only SEPTA can issue the official alert.</b> The app's job is to surface them clearly, not author them. Content quality is a Comms/Control Center fix, not an app rebuild."},
-      {who:"Kristin",av:"k",when:"1m",tag:"why",tg:"tg-why",t:"Detours that move stops never reach the data pipeline today (Chris: 'we rely on paper signs'). That's the operations-side pilot, separate from this app."}
-     ]},
-    {id:"fare", n:5, tab:"Fare", navIcon:3, title:"SEPTA Key · Fare",
-     hint:"Mandatory scope — the Cubic cutover",
-     click:{sel:".keycard .a", x:60,y:188, cap:"Reload / Buy ticket"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"keep",tg:"tg-keep",t:"<b>SEPTA Key is agency-only and non-negotiable.</b> The Cubic migration is time-boxed to Aug 28. It's also SEPTA's strongest competitive category. Core kept scope."}
-     ]},
-    {id:"plan", n:6, tab:"Plan a trip", navIcon:4, title:"Plan a Trip · ceded to Transit",
-     hint:"Try: 'Open in Transit'",
-     click:{sel:".cta", x:90,y:404, cap:"Hand-off to Transit"},
-     comments:[
-      {who:"Jules",av:"j",when:"just now",tag:"cede",tg:"tg-cede",t:"<b>General trip planning is a commodity SEPTA loses.</b> Transit, Google, and Apple already win it and maintain it for free. Hand it off via an official Transit partnership instead of one dev chasing parity."},
-      {who:"Jules",av:"j",when:"just now",tag:"why",tg:"tg-why",t:"<b>What SEPTA pays for:</b> Transit maintains this as a branded SEPTA experience, gifts premium to all riders, and ingests SEPTA's detour/real-time data. SEPTA stops carrying code it can't sustain."}
-     ]}
-  ];
   var NAVICONS=[
     {l:"Home",p:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>'},
     {l:"Schedules",p:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>'},
@@ -334,57 +247,67 @@
     {l:"Buy",p:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>'},
     {l:"Account",p:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'}
   ];
+  var SCREENS=[
+    {id:"home",n:1,tab:"Home",nav:0,cur:"screens/cur_home.png",fut:"f-home",title:"Home · Next to Arrive",
+     diff:"Today favorites sit <b>below a big map</b> and arrival times don't distinguish live from scheduled. The concept leads with <b>Next-to-Arrive + favorites</b> and labels how much to trust each time.",
+     callouts:[{n:1,y:206,t:"Saved trips lead, above the map"},{n:2,y:430,t:"Live / scheduled / not-tracked labeled honestly"}],
+     why:[{who:"Jules",av:"j",when:"now",tag:"restore",tg:"tg-restore",t:"<b>Next-to-Arrive was the #1 dropped capability</b> (54 complaints named it). Cheap to restore — the data and APIs already exist."},
+          {who:"Jules",av:"j",when:"now",tag:"honest",tg:"tg-honest",t:"Route 47 says <b>'no live signal'</b> instead of inventing a time. Show confidence, don't fake it."}]},
+    {id:"rt",n:2,tab:"Real-Time",nav:1,cur:"screens/cur_rt.png",fut:"f-rt",title:"Real-Time · one route",
+     diff:"Today live tracking is a <b>jittery dot-map</b> that's hard to read and silently wrong when a vehicle drops off. The concept is an <b>honest vehicle list</b> that flags uncertainty.",
+     callouts:[{n:1,y:96,t:"Direction toggle"},{n:2,y:404,t:"Uncertain flagged, not a phantom time"}],
+     why:[{who:"Yannick",av:"y",when:"interview",tag:"why",tg:"tg-why",t:"Yannick: trains/routes silently drop off the feed and riders can't tell. Better to say <b>'we don't know'</b> than show a ghost."},
+          {who:"Jules",av:"j",when:"now",tag:"cede",tg:"tg-cede",t:"Don't try to out-map Transit. Our edge is honesty about our own service, not a slicker map."}]},
+    {id:"rail",n:3,tab:"Regional Rail",nav:1,cur:"screens/cur_rail.png",fut:"f-rail",title:"Regional Rail · departures",
+     diff:"Today it's a <b>static schedule table</b> with no track, car count, or live status. The concept is a <b>live departure board</b>: track, cars, on-time-by-minutes, and loud cancellations.",
+     callouts:[{n:1,y:120,t:"Track + car count + lateness"},{n:2,y:344,t:"Cancellation shown loud, with next train"}],
+     why:[{who:"Jules",av:"j",when:"now",tag:"invest",tg:"tg-invest",t:"<b>Regional Rail is SEPTA's real edge.</b> Transit/Google are weak here and train riders are who open and rate the app. Track, cars, lateness are exactly what the redesign removed."},
+          {who:"Jules",av:"j",when:"now",tag:"honest",tg:"tg-honest",t:"Canceled trips are the most severe complaint type (avg 2.8). Surface them clearly with the next option."}]},
+    {id:"alerts",n:4,tab:"Alerts",nav:2,cur:"screens/cur_alerts.png",fut:"f-alerts",title:"Service Alerts",
+     diff:"Today the alerts tab shows only <b>system-wide notices</b> (often empty) in agency-speak. The concept surfaces <b>per-line detours and cancellations</b> and pushes them for your saved trips.",
+     callouts:[{n:1,y:150,t:"Per-line detours & cancellations"},{n:2,y:430,t:"Notify me on my saved trips"}],
+     why:[{who:"Jules",av:"j",when:"now",tag:"keep",tg:"tg-keep",t:"<b>Only SEPTA can issue the official alert.</b> The app's job is to surface them clearly, not author them."},
+          {who:"Kristin",av:"k",when:"1m",tag:"why",tg:"tg-why",t:"Detours that move stops never reach the feed today (Chris: 'we rely on paper signs'). That's the operations-side pilot, separate from this app."}]},
+    {id:"fare",n:5,tab:"Fare",nav:3,cur:"screens/cur_fare.png",fut:"f-fare",title:"SEPTA Key · Fare",
+     diff:"Today the Key tab is a <b>login wall</b>. The concept shows <b>wallet, passes, and the mandatory Cubic migration</b> at a glance.",
+     callouts:[{n:1,y:120,t:"Wallet + passes at a glance, no login wall"},{n:2,y:362,t:"Cubic migration nudge (Aug 28)"}],
+     why:[{who:"Jules",av:"j",when:"now",tag:"keep",tg:"tg-keep",t:"<b>SEPTA Key is agency-only and non-negotiable.</b> The Cubic migration is time-boxed to Aug 28, and it's SEPTA's strongest competitive category. Core kept scope."}]},
+    {id:"plan",n:6,tab:"Plan a trip",nav:4,cur:"screens/cur_plan.png",fut:"f-plan",title:"Plan a Trip · ceded to Transit",
+     diff:"Today planning runs through an <b>in-app browser-by-mode / OTP planner</b> that's inconsistent app-vs-web. The concept <b>hands multimodal planning to a Transit partnership</b> SEPTA pays to maintain.",
+     callouts:[{n:1,y:300,t:"Hand off to Transit, don't rebuild a planner"}],
+     why:[{who:"Jules",av:"j",when:"now",tag:"cede",tg:"tg-cede",t:"<b>General trip planning is a commodity SEPTA loses.</b> Transit, Google, Apple already win it and maintain it free. One dev can't keep it competitive."},
+          {who:"Jules",av:"j",when:"now",tag:"why",tg:"tg-why",t:"<b>What SEPTA pays for:</b> Transit maintains it as a branded SEPTA experience, gifts premium to all riders, and ingests SEPTA's detour/real-time data."}]}
+  ];
 
-  function buildTabs(){
+  function buildChrome(){
     var f=document.getElementById('ftabs');
-    SCREENS.forEach(function(s){
-      var b=document.createElement('div'); b.className='ftab'; b.dataset.id=s.id;
-      b.innerHTML='<span class="n">'+s.n+'</span>'+s.tab;
-      b.onclick=function(){go(s.id)}; f.appendChild(b);
-    });
+    SCREENS.forEach(function(s){var b=document.createElement('div');b.className='ftab';b.dataset.id=s.id;b.innerHTML='<span class="n">'+s.n+'</span>'+s.tab;b.onclick=function(){go(s.id)};f.appendChild(b);});
     var nav=document.getElementById('nav');
-    NAVICONS.forEach(function(ic,i){
-      var t=document.createElement('div'); t.className='tab'; t.dataset.nav=i;
-      t.innerHTML='<svg viewBox="0 0 24 24">'+ic.p+'</svg>'+ic.l;
-      t.onclick=function(){ var sc=SCREENS.find(function(x){return x.navIcon===i}); if(sc) go(sc.id); };
-      nav.appendChild(t);
-    });
+    NAVICONS.forEach(function(ic,i){var t=document.createElement('div');t.className='tab';t.dataset.nav=i;t.innerHTML='<svg viewBox="0 0 24 24">'+ic.p+'</svg>'+ic.l;t.onclick=function(){var sc=SCREENS.find(function(x){return x.nav===i});if(sc)go(sc.id);};nav.appendChild(t);});
   }
+  var cur="home";
   function go(id){
-    var s=SCREENS.find(function(x){return x.id===id}); if(!s)return;
-    document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
-    document.getElementById('v-'+id).classList.add('active');
+    var s=SCREENS.find(function(x){return x.id===id}); if(!s)return; cur=id;
+    document.getElementById('curImg').src=s.cur;
+    document.querySelectorAll('.fview').forEach(function(v){v.classList.remove('active')});
+    document.getElementById(s.fut).classList.add('active');
     document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('active',t.dataset.id===id)});
-    document.querySelectorAll('.nav .tab').forEach(function(t){t.classList.toggle('active',+t.dataset.nav===s.navIcon)});
-    document.getElementById('pTitle').textContent=s.title;
-    document.getElementById('pHint').innerHTML='⌁ Try: '+s.hint.replace(/^Try: /,'');
-    var pb=document.getElementById('pBody'); pb.innerHTML='';
-    s.comments.forEach(function(c){
-      var d=document.createElement('div'); d.className='comment';
-      d.innerHTML='<div class="chead"><div class="avatar av-'+c.av+'">'+c.who.slice(0,1)+(c.who==="Kristin"?"K":(c.who==="Yannick"?"Y":"S"))+'</div>'
-        +'<div><div class="cwho">'+c.who+'</div><div class="cwhen">'+c.when+'</div></div>'
-        +'<span class="tagchip '+c.tg+'">'+c.tag+'</span></div>'
-        +'<div class="ctext">'+c.t+'</div>';
-      pb.appendChild(d);
-    });
-    document.querySelector('.body').scrollTop=0;
-    positionDot(s);
+    document.querySelectorAll('.nav .tab').forEach(function(t){t.classList.toggle('active',+t.dataset.nav===s.nav)});
+    document.getElementById('expTitle').textContent=s.title;
+    document.getElementById('expDiff').innerHTML=s.diff;
+    var en=document.getElementById('expNotes'); en.innerHTML='';
+    s.callouts.forEach(function(c){var d=document.createElement('div');d.className='conote';d.innerHTML='<div class="cn">'+c.n+'</div><div class="ct">'+c.t+'</div>';en.appendChild(d);});
+    var ew=document.getElementById('expWhy'); ew.innerHTML='';
+    s.why.forEach(function(w){var d=document.createElement('div');d.className='why';d.innerHTML='<div class="whead"><div class="avatar av-'+w.av+'">'+(w.who==="Kristin"?"K":w.who==="Yannick"?"Y":"JS")+'</div><div><div class="cwho">'+w.who+'</div><div class="cwhen">'+w.when+'</div></div><span class="tagchip '+w.tg+'">'+w.tag+'</span></div><div class="wtext">'+w.t+'</div>';ew.appendChild(d);});
+    // callout markers outside the future phone
+    var co=document.getElementById('callouts'); co.innerHTML='';
+    s.callouts.forEach(function(c){var d=document.createElement('div');d.className='callout';d.style.top=(70+c.y)+'px';
+      d.innerHTML='<div class="mk">'+c.n+'</div><div class="lead"></div>';co.appendChild(d);});
+    document.getElementById('futBody').scrollTop=0;
   }
-  function positionDot(s){
-    var dot=document.getElementById('cdot');
-    if(!s.click){dot.classList.remove('show');return;}
-    document.getElementById('cdcap').textContent=s.click.cap;
-    dot.style.left=s.click.x+'px'; dot.style.top=s.click.y+'px';
-    dot.classList.add('show');
-  }
-  function toggleC(){
-    document.body.classList.toggle('coach');
-    var on=document.body.classList.contains('coach');
-    var b=document.getElementById('cmtBtn'); b.classList.toggle('on',on);
-    b.textContent='Comments & coach marks: '+(on?'ON':'OFF');
-    document.getElementById('panel').classList.toggle('hidden',!on);
-  }
-  buildTabs(); go('home');
+  function nextJob(){var i=SCREENS.findIndex(function(x){return x.id===cur});go(SCREENS[(i+1)%SCREENS.length].id);}
+  function toggleC(){document.body.classList.toggle('coach');var on=document.body.classList.contains('coach');var b=document.getElementById('cmtBtn');b.classList.toggle('on',on);b.textContent='Callout markers: '+(on?'ON':'OFF');}
+  buildChrome(); go('home');
 </script>
 </body>
 </html>
