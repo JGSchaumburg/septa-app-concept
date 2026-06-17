@@ -26,16 +26,17 @@
   .cmttoggle{border:1px solid #c4ced8;background:#fff;color:#0e2a4a;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
   .cmttoggle.on{background:var(--note);border-color:var(--note);color:#fff}
 
-  .cols{max-width:1200px;margin:16px auto 0;display:flex;gap:26px;align-items:flex-start;justify-content:center}
+  .cols{max-width:1340px;margin:16px auto 0;display:flex;gap:18px;align-items:flex-start;justify-content:center}
   .col{display:flex;flex-direction:column;align-items:center}
-  .colhd{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;padding:4px 12px;border-radius:20px}
-  .hd-cur{background:#dfe6ee;color:#5b6b7a} .hd-fut{background:#0e2a4a;color:#fff} .hd-exp{background:#fff3ec;color:#b3502a;border:1px solid #ffd9c2}
+  .colhd{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;padding:4px 11px;border-radius:20px;text-align:center}
+  .hd-cur{background:#dfe6ee;color:#5b6b7a} .hd-fut{background:#0e2a4a;color:#fff} .hd-tr{background:#e6f4ec;color:#0f7a4c;border:1px solid #bfe6cf} .hd-exp{background:#fff3ec;color:#b3502a;border:1px solid #ffd9c2}
 
   /* phones */
   .phonewrap{position:relative}
-  .phone{width:312px;height:672px;background:#000;border-radius:44px;padding:11px;box-shadow:0 22px 48px rgba(8,30,60,.3)}
+  .phone{width:288px;height:620px;background:#000;border-radius:42px;padding:10px;box-shadow:0 18px 40px rgba(8,30,60,.28)}
   .screen{width:100%;height:100%;background:var(--navy);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
   .curimg{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+  .trnone{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#c7d4e2;font-size:14px;font-weight:600;line-height:1.5;padding:24px;background:var(--navy)}
 
   /* current-state img clickable hint */
   .swiphint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;font-size:10.5px;padding:4px 10px;border-radius:20px;z-index:5;pointer-events:none}
@@ -112,6 +113,9 @@
   .expbody{padding:14px 15px}
   .diff{font-size:12.5px;line-height:1.5;color:#33424f;background:#f5f8fb;border-left:3px solid var(--blue);padding:9px 11px;border-radius:0 8px 8px 0;margin-bottom:14px}
   .diff b{color:#15212e}
+  .verdict{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;font-weight:700;color:#33424f}
+  .vchip{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:6px;color:#fff}
+  .v-keep{background:#2a8f5a} .v-cede{background:#b3402a} .v-share{background:#2563a8}
   .conote{display:flex;gap:9px;margin-bottom:11px}
   .conote .cn{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--note);color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center}
   .conote .ct{font-size:12px;line-height:1.45;color:#33424f} .conote .ct b{color:#15212e}
@@ -128,8 +132,8 @@
 </head>
 <body class="coach">
   <div class="top">
-    <h1>SEPTA App — Current vs Future Concept</h1>
-    <p>Left is the app as it ships today (real screenshots). Middle is a future concept scoped to what only SEPTA can own and one developer can sustain. Right explains what changes on each screen and why. Use the feature tabs to move all three columns to the same rider job. Notes sit outside the screens; everything inside a phone is real UI.</p>
+    <h1>SEPTA App — Current, Future, and Transit, side by side</h1>
+    <p>Four columns per rider job: the SEPTA app as it ships today (real screenshots), a future concept scoped to what only SEPTA can own, the Transit app SEPTA riders already use (real screens from Transit's May 6 pitch), and the own-vs-cede call. Use the feature tabs to move all columns to the same job. Notes sit outside the screens; everything inside a phone is real UI.</p>
     <div class="ftabs" id="ftabs"></div>
     <div class="ctlrow">
       <div style="font-size:11px;color:#7a8ca0">Current = actual app screenshots from the ATLAS drive. Future = concept with mock data, not a spec.</div>
@@ -224,12 +228,22 @@
       </div>
     </div>
 
-    <!-- COLUMN 3: EXPLAINER -->
+    <!-- COLUMN 3: TRANSIT -->
+    <div class="col">
+      <div class="colhd hd-tr">Transit (today)</div>
+      <div class="phonewrap"><div class="phone"><div class="screen">
+        <img class="curimg" id="trImg" src="screens/transit_home.png" alt="Transit app screen">
+        <div class="swiphint" id="trHint" style="background:rgba(15,122,76,.8)">what SEPTA riders already use</div>
+      </div></div></div>
+    </div>
+
+    <!-- COLUMN 4: EXPLAINER -->
     <div class="col exp">
-      <div class="colhd hd-exp">What changes &amp; why</div>
+      <div class="colhd hd-exp">Own or cede?</div>
       <div class="expcard">
         <div class="exphd" id="expTitle">Home · Next to Arrive</div>
         <div class="expbody">
+          <div class="verdict" id="expVerdict"></div>
           <div class="diff" id="expDiff"></div>
           <div id="expNotes"></div>
           <div class="whyhd">Why</div>
@@ -248,31 +262,31 @@
     {l:"Account",p:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'}
   ];
   var SCREENS=[
-    {id:"home",n:1,tab:"Home",nav:0,cur:"screens/cur_home.png",fut:"f-home",title:"Home · Next to Arrive",
+    {id:"home",n:1,tab:"Home",nav:0,cur:"screens/cur_home.png",fut:"f-home",transit:"screens/transit_home.png",verdict:{v:"share",t:"Both do it. SEPTA keeps a thin owned home; many riders already prefer Transit's."},title:"Home · Next to Arrive",
      diff:"Today favorites sit <b>below a big map</b> and arrival times don't distinguish live from scheduled. The concept leads with <b>Next-to-Arrive + favorites</b> and labels how much to trust each time.",
      callouts:[{n:1,y:206,t:"Saved trips lead, above the map"},{n:2,y:430,t:"Live / scheduled / not-tracked labeled honestly"}],
      why:[{who:"Jules",av:"j",when:"now",tag:"restore",tg:"tg-restore",t:"<b>Next-to-Arrive was the #1 dropped capability</b> (54 complaints named it). Cheap to restore — the data and APIs already exist."},
           {who:"Jules",av:"j",when:"now",tag:"honest",tg:"tg-honest",t:"Route 47 says <b>'no live signal'</b> instead of inventing a time. Show confidence, don't fake it."}]},
-    {id:"rt",n:2,tab:"Real-Time",nav:1,cur:"screens/cur_rt.png",fut:"f-rt",title:"Real-Time · one route",
+    {id:"rt",n:2,tab:"Real-Time",nav:1,cur:"screens/cur_rt.png",fut:"f-rt",transit:"screens/transit_rt.png",verdict:{v:"cede",t:"Cede. Transit's live tracking and stop sheets already beat SEPTA's. Keep only honest status."},title:"Real-Time · one route",
      diff:"Today live tracking is a <b>jittery dot-map</b> that's hard to read and silently wrong when a vehicle drops off. The concept is an <b>honest vehicle list</b> that flags uncertainty.",
      callouts:[{n:1,y:96,t:"Direction toggle"},{n:2,y:404,t:"Uncertain flagged, not a phantom time"}],
      why:[{who:"Yannick",av:"y",when:"interview",tag:"why",tg:"tg-why",t:"Yannick: trains/routes silently drop off the feed and riders can't tell. Better to say <b>'we don't know'</b> than show a ghost."},
           {who:"Jules",av:"j",when:"now",tag:"cede",tg:"tg-cede",t:"Don't try to out-map Transit. Our edge is honesty about our own service, not a slicker map."}]},
-    {id:"rail",n:3,tab:"Regional Rail",nav:1,cur:"screens/cur_rail.png",fut:"f-rail",title:"Regional Rail · departures",
+    {id:"rail",n:3,tab:"Regional Rail",nav:1,cur:"screens/cur_rail.png",fut:"f-rail",transit:"screens/transit_rail.png",verdict:{v:"keep",t:"Keep. SEPTA's edge. Transit's rail card (train #, on-time %) shows the bar; SEPTA should own this experience."},title:"Regional Rail · departures",
      diff:"Today it's a <b>static schedule table</b> with no track, car count, or live status. The concept is a <b>live departure board</b>: track, cars, on-time-by-minutes, and loud cancellations.",
      callouts:[{n:1,y:120,t:"Track + car count + lateness"},{n:2,y:344,t:"Cancellation shown loud, with next train"}],
      why:[{who:"Jules",av:"j",when:"now",tag:"invest",tg:"tg-invest",t:"<b>Regional Rail is SEPTA's real edge.</b> Transit/Google are weak here and train riders are who open and rate the app. Track, cars, lateness are exactly what the redesign removed."},
           {who:"Jules",av:"j",when:"now",tag:"honest",tg:"tg-honest",t:"Canceled trips are the most severe complaint type (avg 2.8). Surface them clearly with the next option."}]},
-    {id:"alerts",n:4,tab:"Alerts",nav:2,cur:"screens/cur_alerts.png",fut:"f-alerts",title:"Service Alerts",
+    {id:"alerts",n:4,tab:"Alerts",nav:2,cur:"screens/cur_alerts.png",fut:"f-alerts",transit:"screens/transit_alerts.png",verdict:{v:"keep",t:"Keep the authority. Transit's Royale would gray-label SEPTA alerts (shown) — useful reach, but the official voice must stay SEPTA's."},title:"Service Alerts",
      diff:"Today the alerts tab shows only <b>system-wide notices</b> (often empty) in agency-speak. The concept surfaces <b>per-line detours and cancellations</b> and pushes them for your saved trips.",
      callouts:[{n:1,y:150,t:"Per-line detours & cancellations"},{n:2,y:430,t:"Notify me on my saved trips"}],
      why:[{who:"Jules",av:"j",when:"now",tag:"keep",tg:"tg-keep",t:"<b>Only SEPTA can issue the official alert.</b> The app's job is to surface them clearly, not author them."},
           {who:"Kristin",av:"k",when:"1m",tag:"why",tg:"tg-why",t:"Detours that move stops never reach the feed today (Chris: 'we rely on paper signs'). That's the operations-side pilot, separate from this app."}]},
-    {id:"fare",n:5,tab:"Fare",nav:3,cur:"screens/cur_fare.png",fut:"f-fare",title:"SEPTA Key · Fare",
+    {id:"fare",n:5,tab:"Fare",nav:3,cur:"screens/cur_fare.png",fut:"f-fare",transit:"",verdict:{v:"keep",t:"Keep, full stop. Transit doesn't do SEPTA Key. Fare is agency-only and the Cubic cutover is mandatory."},title:"SEPTA Key · Fare",
      diff:"Today the Key tab is a <b>login wall</b>. The concept shows <b>wallet, passes, and the mandatory Cubic migration</b> at a glance.",
      callouts:[{n:1,y:120,t:"Wallet + passes at a glance, no login wall"},{n:2,y:362,t:"Cubic migration nudge (Aug 28)"}],
      why:[{who:"Jules",av:"j",when:"now",tag:"keep",tg:"tg-keep",t:"<b>SEPTA Key is agency-only and non-negotiable.</b> The Cubic migration is time-boxed to Aug 28, and it's SEPTA's strongest competitive category. Core kept scope."}]},
-    {id:"plan",n:6,tab:"Plan a trip",nav:4,cur:"screens/cur_plan.png",fut:"f-plan",title:"Plan a Trip · ceded to Transit",
+    {id:"plan",n:6,tab:"Plan a trip",nav:4,cur:"screens/cur_plan.png",fut:"f-plan",transit:"screens/transit_plan.png",verdict:{v:"cede",t:"Cede. General multimodal planning is a commodity Transit and Google already win. Hand it off."},title:"Plan a Trip · ceded to Transit",
      diff:"Today planning runs through an <b>in-app browser-by-mode / OTP planner</b> that's inconsistent app-vs-web. The concept <b>hands multimodal planning to a Transit partnership</b> SEPTA pays to maintain.",
      callouts:[{n:1,y:300,t:"Hand off to Transit, don't rebuild a planner"}],
      why:[{who:"Jules",av:"j",when:"now",tag:"cede",tg:"tg-cede",t:"<b>General trip planning is a commodity SEPTA loses.</b> Transit, Google, Apple already win it and maintain it free. One dev can't keep it competitive."},
@@ -289,11 +303,20 @@
   function go(id){
     var s=SCREENS.find(function(x){return x.id===id}); if(!s)return; cur=id;
     document.getElementById('curImg').src=s.cur;
+    // transit column
+    var tw=document.getElementById('trImg').parentNode;
+    if(s.transit){ document.getElementById('trImg').style.display='block'; document.getElementById('trImg').src=s.transit;
+      document.getElementById('trHint').style.display='block';
+      var ph=tw.querySelector('.trnone'); if(ph) ph.remove(); }
+    else { document.getElementById('trImg').style.display='none'; document.getElementById('trHint').style.display='none';
+      if(!tw.querySelector('.trnone')){ var n=document.createElement('div'); n.className='trnone'; n.innerHTML='<div style="font-size:34px;margin-bottom:10px">🎫</div>Transit does not<br>do SEPTA Key fare.<br><span style="opacity:.7;font-size:11px">This surface stays SEPTA-owned.</span>'; tw.appendChild(n); } }
     document.querySelectorAll('.fview').forEach(function(v){v.classList.remove('active')});
     document.getElementById(s.fut).classList.add('active');
     document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('active',t.dataset.id===id)});
     document.querySelectorAll('.nav .tab').forEach(function(t){t.classList.toggle('active',+t.dataset.nav===s.nav)});
     document.getElementById('expTitle').textContent=s.title;
+    var V={keep:["v-keep","KEEP · own it"],cede:["v-cede","CEDE · to Transit"],share:["v-share","SHARE · both"]};
+    if(s.verdict){var vv=V[s.verdict.v];document.getElementById('expVerdict').innerHTML='<span class="vchip '+vv[0]+'">'+vv[1]+'</span><span>'+s.verdict.t+'</span>';}
     document.getElementById('expDiff').innerHTML=s.diff;
     var en=document.getElementById('expNotes'); en.innerHTML='';
     s.callouts.forEach(function(c){var d=document.createElement('div');d.className='conote';d.innerHTML='<div class="cn">'+c.n+'</div><div class="ct">'+c.t+'</div>';en.appendChild(d);});
